@@ -1,8 +1,9 @@
 # Auth-Server
-Authentication System Phase 1: Deploy an Express server that implements Basic Authentication, with signup and signin capabilities, using a Mongo database for storage.
+ Handle Basic Authentication (user provides a username + password) and OAuth (user authenticates through a 3rd party). When a “good” login happens, the user is considered to be “authenticated” and our auth-server generates a JWT signed “Token” which is returned to the application
 
-# Api-Server
-# LAB - 06
+
+# Bearer Authorizatoin
+# LAB - 12
 
 ## Deployment Test
 
@@ -15,7 +16,7 @@ Authentication System Phase 1: Deploy an Express server that implements Basic Au
 
 #### `.env` requirements
 
-- `PORT` - Port Number
+- `PORT` - 3000
 
 #### Running the app
 
@@ -36,12 +37,3 @@ Authentication System Phase 1: Deploy an Express server that implements Basic Au
 - Unit Tests: `npm run test`
 - Lint Tests: `npm run lint`
 
-#### UML
-
-(Created with [diagrams](https://app.diagrams.net/))
-
-![UML Diagram](uml.png)
-
-### SwaggerHub URL
-
-https://app.swaggerhub.com/apis/SpencerLazzar/Lab6Collection/0.1

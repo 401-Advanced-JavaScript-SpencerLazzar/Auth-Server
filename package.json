@@ -1,0 +1,30 @@
+{
+  "name": "auth-server",
+  "version": "1.0.0",
+  "description": "Authentication System Phase 1: Deploy an Express server that implements Basic Authentication, with signup and signin capabilities, using a Mongo database for storage.",
+  "main": "index.js",
+  "scripts": {
+    "test": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/401-Advanced-JavaScript-SpencerLazzar/Auth-Server.git"
+  },
+  "author": "Spencer Lazzar",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/401-Advanced-JavaScript-SpencerLazzar/Auth-Server/issues"
+  },
+  "homepage": "https://github.com/401-Advanced-JavaScript-SpencerLazzar/Auth-Server#readme",
+  "dependencies": {
+    "base-64": "^1.0.0",
+    "bcrypt": "^5.0.0",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "mongo": "^0.1.0",
+    "mongodb": "^3.6.2",
+    "mongoose": "^5.10.10",
+    "nodemon": "^2.0.6"
+  }
+}

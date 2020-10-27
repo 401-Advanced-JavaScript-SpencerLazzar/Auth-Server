@@ -1,4 +1,3 @@
-const { Mongoose } = require("mongoose");
 const mongoose = require('mongoose');
 const base64 = require('base-64');
 const bcrypt = require('bcrypt');
@@ -6,40 +5,37 @@ const jwt = require('jsonwebtoken');
 
 const userSchema = new mongoose.Schema({
   username: {
-    tyep: String,
+    type: String,
   },
   password: {
-    tyep: String,
+    type: String,
   }
 }, { timestamps: true });
 
 
-userSchema.save = async function (username, password) {
-  const hashedPassword = await bcrypt.hash(password, 10);
-  console.log(hashedPassword);
 
-  this[username] = {
-    username: username,
-    password: hashedPassword,
-  }
+userSchema.pre('save', async function () {
+  this.password = await bcrypt.hash(this.password, 10);
+});
+
+
+userSchema.statics.authenticateBasic = async function () {
+  return this.findOne({ username })
+    .then(async user => {
+      const isValid = await bcrypt.compare(password, user.password);
+      if (isValid) {
+        const token = await user.generateToken();
+        return token;
+      }
+    });
 }
 
-userSchema.generateToken = function (username) {
-  let token = jwt.sign({ username: username }, 'secret_string');
+
+userSchema.methods.generateToken = async function () {
+  let token = await jwt.sign({ username: this.username }, process.env.SECRET_STRING);
   return token;
 }
 
-userSchema.authenticateBasic = async function (user, pass) {
-  let isValidPassword = await bcrypt.compare(pass, this[user].password);
-  console.log(isValidPassword);
-  if (isValidPassword) {
-    return this.generateToken(user);
-  } else {
-    return Promise.reject('No user found');
-  }
-}
-
-
-
 
 module.exports = mongoose.model('User', userSchema);
+

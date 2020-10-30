@@ -10,16 +10,35 @@ const userSchema = new mongoose.Schema({
   password: {
     type: String,
   }
+  // role: {
+  //   type: String,
+  //   required: true,
+  //   enum: ['user', 'admin', 'editor', 'user']
+  // }
 }, { timestamps: true });
 
-
+const capabilities = {
+  admin: ['read', 'create', 'update', 'delete'],
+  writer: ['read', 'create',],
+  editor: ['read', 'update'],
+  user: ['read']
+}
 
 userSchema.pre('save', async function () {
   this.password = await bcrypt.hash(this.password, 10);
 });
 
 
-userSchema.statics.authenticateBasic = async function () {
+userSchema.methods.generateToken = async function () {
+  let token = await jwt.sign({
+    username: this.username,
+    capabilities: capabilities[this.role],
+  });
+
+  return token;
+}
+
+userSchema.statics.authenticateBasic = async function (username, password) {
   return this.findOne({ username })
     .then(async user => {
       const isValid = await bcrypt.compare(password, user.password);
@@ -30,12 +49,10 @@ userSchema.statics.authenticateBasic = async function () {
     });
 }
 
-
 userSchema.methods.generateToken = async function () {
   let token = await jwt.sign({ username: this.username }, process.env.SECRET_STRING);
   return token;
 }
-
 
 userSchema.methods.comparePasswords = async function (password) {
   let isValid = bcrypt.compare(password, this.password);
